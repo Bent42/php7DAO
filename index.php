@@ -23,12 +23,27 @@ $root = new Usuario();
 
 //carrega o usuario usando o login e a senha
 
+//$usuario = new Usuario();
+
+//$usuario->login("Lamora42","3212");
+
+//echo $usuario;
+
+//inset na tabela com procedure
+
+//$aluno = new Usuario("yankz","0987");
+
+//$aluno->insert();
+
+//echo $aluno;
+
+//update de um usuario
+
 $usuario = new Usuario();
 
-$usuario->login("Lamora42","3212");
+$usuario->loadById(10);
+$usuario->update("professor","OwO");
 
 echo $usuario;
-
-
 
  ?>

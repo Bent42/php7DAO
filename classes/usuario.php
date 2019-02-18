@@ -41,11 +41,8 @@ class Usuario{
     	));
 
     	if (count($result)>0) {
-    		$row = $result[0];
-    		$this->setUsucod($row["usucod"]);
-    		$this->setUsulogin($row["usulogin"]);
-    		$this->setUsusenha($row["ususenha"]);
-    		$this->setUsudtcadastro(new DateTime($row["usudtcadastro"]));
+    		
+    		$this->setDados($result[0]);
     	}
 
     }
@@ -77,16 +74,56 @@ class Usuario{
     	));
 
     	if (count($result)>0) {
-    		$row = $result[0];
-    		$this->setUsucod($row["usucod"]);
-    		$this->setUsulogin($row["usulogin"]);
-    		$this->setUsusenha($row["ususenha"]);
-    		$this->setUsudtcadastro(new DateTime($row["usudtcadastro"]));
+    		
+    		$this->setDados($result[0]);
+
     	}else{
 
     		throw new Exception("Login ou senha invalidos!!", 1);
     		
     	}
+	}
+
+	public function setDados($dados){
+
+    		$this->setUsucod($dados["usucod"]);
+    		$this->setUsulogin($dados["usulogin"]);
+    		$this->setUsusenha($dados["ususenha"]);
+    		$this->setUsudtcadastro(new DateTime($dados["usudtcadastro"]));		
+
+	}
+
+	public function __construct($login="",$senha=""){
+
+		$this->setUsulogin($login);
+		$this->setUsusenha($senha);
+	}
+
+	public function insert(){
+
+		$sql = new Sql();
+
+		$result = $sql->select("CALL p_usuarios_insert(:login, :senha)",array(
+			":login"=>$this->getUsulogin(),
+			":senha"=>$this->getUsusenha()
+		));
+
+		if (count($result)>0) {
+			$this->setDados($result[0]);
+		}
+	}
+
+	public function update($login, $senha){
+
+		$this->setUsulogin($login);
+		$this->setUsusenha($senha);
+
+		$sql = new Sql();
+		$sql->query("UPDATE usuarios SET usulogin = :login, ususenha = :senha where usucod = :codigo",array(
+			":login"=>$this->getUsulogin(),
+			":senha"=>$this->getUsusenha(),
+			":codigo"=>$this->getUsucod()
+		));
 	}
 
     public function __toString(){
