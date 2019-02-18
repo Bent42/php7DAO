@@ -50,6 +50,45 @@ class Usuario{
 
     }
 
+
+	public static function list(){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM usuarios order by usulogin");
+	}
+
+	public static function search($login){
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM usuarios where usulogin like :search order by usulogin",array(
+
+			"search"=>"%".$login."%"
+
+		));
+	}
+
+	public function login($login, $senha){
+		$sql = new Sql();
+    	$result = $sql->SELECT("SELECT * FROM usuarios where usulogin = :login and ususenha = :senha",array(
+    		":login"=>$login,
+    		":senha"=>$senha
+    	));
+
+    	if (count($result)>0) {
+    		$row = $result[0];
+    		$this->setUsucod($row["usucod"]);
+    		$this->setUsulogin($row["usulogin"]);
+    		$this->setUsusenha($row["ususenha"]);
+    		$this->setUsudtcadastro(new DateTime($row["usudtcadastro"]));
+    	}else{
+
+    		throw new Exception("Login ou senha invalidos!!", 1);
+    		
+    	}
+	}
+
     public function __toString(){
 
     	return json_encode(array(
