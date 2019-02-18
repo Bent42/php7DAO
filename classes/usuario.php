@@ -126,6 +126,22 @@ class Usuario{
 		));
 	}
 
+	public function delete(){
+
+		$sql = new Sql();
+
+		$sql->query("DELETE FROM usuarios where usucod = :codigo",array(
+			":codigo"=>$this->getUsucod()
+
+		));
+
+		$this->setUsucod(0);
+		$this->setUsulogin("");
+		$this->setUsusenha("");
+		$this->setUsudtcadastro(new DateTime());
+
+	}
+
     public function __toString(){
 
     	return json_encode(array(
